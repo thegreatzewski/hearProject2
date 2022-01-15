@@ -4,6 +4,7 @@ from threading import Thread
 from pythonosc import udp_client
 #import RPi.GPIO as GPIO
 import numpy 
+
 dataIDlist = []        #this creates an array to store both client ids in and their volume data
 keyIDlist = []
 oscInputList = []
@@ -22,16 +23,19 @@ def root():
 def post_data():
     print("VOLUME:", request.args.get("volume"))
     print("KEYID:", request.args.get("keyID"))
+    print("THE KEYID LIST IS:")
+    #print(keyIDlist)
+    print("THE DATAID LIST IS:")
+    print(dataIDlist)
+
     client = udp_client.SimpleUDPClient("10.19.27.30", 6448)   #for osc
     volume_data = request.args.get("volume")
     keyIDlist = extractKeyID(dataIDlist)
-    print("THE KEYID LIST IS:")
-    print(keyIDlist)
+
     if request.args.get("keyID") not in keyIDlist:             #this bit is checking whether the keyid is already in either position of the array
         data_list = [request.args.get("keyID") , volume_data]
         dataIDlist.append(data_list)                                                 #add to the list if not
-    print("THE DATAID LIST IS:")
-    print(dataIDlist)
+
     print(numpy.float32(volume_data))
 
     # keyID_data = request.args.get("keyID")
@@ -39,7 +43,7 @@ def post_data():
     print(volume_data)
     if volume_data != None:
         client.send_message("/volumeosc_1/", volume_data32 )
-        print("OSCDATA SENT")
+        print("test OSCDATA SENT")
 
     if len(keyIDlist) > 0:              #if there is a client, for every addition to the array(if the keyID already exists) add its volume to the second position of volume_data
         count = 0
