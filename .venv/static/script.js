@@ -1,5 +1,7 @@
 var mic;
 let keyID;
+let r, g, b;
+let rSlider;
 //var socket = io();
 
 function setup() {
@@ -27,27 +29,34 @@ function setup() {
     mic = new p5.AudioIn();
     mic.start();
     frameRate(10);
-    createCanvas(1000, 1000);
+    createCanvas(displayWidth, displayHeight);
+    // r = random(50, 255);
+    // g = random(0, 200);
+    // b = random(50, 255);
     textSize(200);
+
+    rSlider = createSlider(0,300, 100);
+    rSlider.position(300,300);
 
 }
 function draw() {
 
 
-
-    background('#33333 ')
+    background(r, g, b);
+ 
+    
     var vol = mic.getLevel();
     // send vol to the server every frame. The framerate is 2 fps so this is every 500ms.
     // If you increrase the framerate, maybe you should use setTimeout instead
     
     
-    background(220);
+    
     textSize(16);
     fill(color('Green'));
     textAlign(CENTER);
     text("text", 600, 300);
-    ellipse(mouseX, mouseY, vol*1000, vol*1000);
-    
+    ellipse(100, 100, vol*1000, vol*1000);
+    r = rSlider.value();
   
 
     console.log(vol);
@@ -56,9 +65,18 @@ function draw() {
         "keyID": keyID,
     }
     
+    
+
     //socket.emit('volume', data )
     $.get("/publish", data=d, crossdomain=false)
     //also using jquery for requests is like using an elephant gun to kill gophers
 
     
 }
+
+
+// function deviceMoved() {
+//     r = map(accelerationX, -90, 90, 100, 175);
+//     g = map(accelerationY, -90, 90, 100, 200);
+//     b = map(accelerationZ, -90, 90, 100, 200);
+//   }
