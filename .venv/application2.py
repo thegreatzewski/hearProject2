@@ -85,19 +85,19 @@ def post_data():
 
     # here is yet another way of sending osc
 
-    send_address = '192.168.1.77', 6448
-    c = OSC.OSCClient()
-    c.connect( send_address )
-    count4 = 0
-    rNum = OSC.OSCMessage()
-    rNum.setAddress("/jake/inputs")
-    for i in funVariable:
-        n = funVariable[count4]
-        rNum.append(n)
-        print("sent some values: ", rNum)
-        c.send(rNum)
-        count4=count4+1
-    print("sent rNum all the things: ", rNum)
+    # send_address = '192.168.1.77', 6448
+    # c = OSC.OSCClient()
+    # c.connect( send_address )
+    # count4 = 0
+    # rNum = OSC.OSCMessage()
+    # rNum.setAddress("/jake/inputs")
+    # for i in funVariable:
+    #     n = funVariable[count4]
+    #     rNum.append(n)
+    #     print("sent some values: ", rNum)
+    #     c.send(rNum)
+    #     count4=count4+1
+    # print("sent rNum all the things: ", rNum)
     
     return {}
 
