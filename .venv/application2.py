@@ -1,14 +1,15 @@
 
 # this is a remastered version of application.py
 # sat jan 15 2022
-# jake kaliszewski, felix loftus, conrad menchine
+# jake kaliszewski, felix loftus, conrad menchine, and many many stackexchangers
 ###################################################
 
 
 from flask import Flask, render_template, request
 from pythonosc import udp_client, osc_message_builder
 import numpy
-from itertools import zip_longest
+ 
+
 
 dataIDlist = []        #this creates an array to store both client ids in and their volume data
 keyIDlist = []
@@ -26,7 +27,7 @@ def post_data():
 
     keyIDlist = extractKeyID(dataIDlist)
     volumeList = extractVolume(dataIDlist)
-    client = udp_client.SimpleUDPClient("10.19.27.30", 6448)   #for osc
+    client = udp_client.SimpleUDPClient("192.168.1.77", 6448)   #for osc
     volume_data = request.args.get("volume")
     volume_data = ((float(volume_data))*1000) 
     keyID = request.args.get("keyID")
@@ -38,8 +39,10 @@ def post_data():
     print("DATAID LIST IS:" , dataIDlist) 
     print("VOLUME LIST IS:" , volumeList) 
     intVolumeList = [int(z) for z in volumeList] 
-      
 
+    if len(volumeList) > 9:
+        volumeList.pop(0)
+      
     if keyID not in keyIDlist:             #this bit is checking whether the keyid is already in either position of the array
         data_list = [keyID , volume_data]    #data_list is just one client and its accompanying data
         dataIDlist.insert(0, data_list)                                                 #add to the list of all clients if not
@@ -52,31 +55,50 @@ def post_data():
             count=count+1
 
     #this is a new method for sending osc messages
-    # yetAnotherList = []
-    justDataList = [0]*10   #sets up list of fixed length, justdata will stay this length
-    # for x in range(0,len(justDataList)):
-    #     yetAnotherList.append(volumeList[x] + justDataList[x])
-    # print("this is yet another list:")
-    # print(yetAnotherList)
+   
+    justDataList = [0.0]*10   #sets up list of fixed length, justdata will stay this length           ###justdatalist!###
+  
+    funVariable = justDataList  
+    print("JUST DATALIST IS:" , justDataList) 
+    print("FUN VARIABLE IS:" , funVariable)                                                                 ###funvariable###
+    # addStart = len(justDataList) - len(volumeList) #this chunk adds two lists of different sizes to create a list of 10 with only volume data and zeros(if less than 10 people have connected)
+    # count3 = 0                                                                  
+    # for i in volumeList:
+    #     funVariable[addStart+count3] = i + justDataList[addStart+count3]
+    #     count3=count3+1
+    # if len(funVariable) > 9:
+    #     funVariable.pop(9)
+    # print(funVariable)
 
+    # msg = osc_message_builder.OscMessageBuilder(address = '/data_inputs')
+    # count2 = 0
+    # for keyID in dataIDlist:
+    #     msg.add_arg(justDataList[count2], arg_type='f')   #add position [count2] of justdatalist to the msg 
+    #     count2=count2+1
+    #     print("JUST DATA LIST IS:")
+    #     print(justDataList)
+    #     print(funVariable)
+
+    # msg = msg.build()
+    # client.send(msg)
+
+
+    # here is yet another way of sending osc
+
+    send_address = '192.168.1.77', 6448
+    c = OSC.OSCClient()
+    c.connect( send_address )
+    count4 = 0
+    rNum = OSC.OSCMessage()
+    rNum.setAddress("/jake/inputs")
+    for i in funVariable:
+        n = funVariable[count4]
+        rNum.append(n)
+        print("sent some values: ", rNum)
+        c.send(rNum)
+        count4=count4+1
+    print("sent rNum all the things: ", rNum)
     
-
-    # if keyID not in keyIDlist:
-    #     justDataList[keyIDlist.index(keyID)] = request.args.get("volume")  #an attempt at making a list of just volumes 
- 
-    msg = osc_message_builder.OscMessageBuilder(address = '/py/data_inputs')
-    count2 = 0
-    for keyID in dataIDlist:
-        msg.add_arg(justDataList[count2], arg_type='f')   #add position [count2] of justdatalist to the msg 
-        if len(justDataList) > 10:
-            justDataList.pop(0)
-        count2=count2+1
-        print("JUST DATA LIST IS:")
-        print(justDataList)
-
-    msg = msg.build()
-    client.send(msg)
- 
     return {}
 
 def extractKeyID(lst):                     #for loop function extracts each keyId 

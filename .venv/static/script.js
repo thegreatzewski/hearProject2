@@ -44,7 +44,7 @@ function draw() {
 
     background(r, g, b);
  
-    
+  
     var vol = mic.getLevel();
     // send vol to the server every frame. The framerate is 2 fps so this is every 500ms.
     // If you increrase the framerate, maybe you should use setTimeout instead
@@ -60,6 +60,7 @@ function draw() {
   
 
     console.log(vol);
+
     d = {
         "volume": vol,
         "keyID": keyID,
