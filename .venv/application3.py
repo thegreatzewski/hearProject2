@@ -11,16 +11,16 @@ app = Flask(__name__,static_url_path="/")
 
 @app.route("/")
 def root():
-    return app.send_static_file('index.html')
+    return app.send_static_file('index2.html')
 
 @app.route("/publish", methods=["POST", "GET"])
 def post_data():
 
     keyIDlist = extractKeyID(dataIDlist)
     volumeList = extractVolume(dataIDlist)
-    client = udp_client.SimpleUDPClient("192.168.1.77", 6448)   #for osc
+    # client = udp_client.SimpleUDPClient("192.168.1.77", 6448)   #for osc
     volume_data = request.args.get("volume")
-    volume_data = ((float(volume_data))*1000) 
+    volume_data = ((float(volume_data))) 
     keyID = request.args.get("keyID")
     print(volume_data)
 
@@ -31,8 +31,6 @@ def post_data():
     print("VOLUME LIST IS:" , volumeList) 
     intVolumeList = [int(z) for z in volumeList] 
 
-    if len(volumeList) > 9:
-        volumeList.pop(0)
       
     if keyID not in keyIDlist:             #this bit is checking whether the keyid is already in either position of the array
         data_list = [keyID , volume_data]    #data_list is just one client and its accompanying data
@@ -52,19 +50,18 @@ def post_data():
     for i in volumeList:
         funVariable[addStart+count3] = i + funVariable[addStart+count3]
         count3=count3+1
-    if len(funVariable) > 9:
+    if len(funVariable) > 10:
         funVariable.pop(9)
     print("FUN VARIABLE IS:" , funVariable)                                                                 ###funvariable###
 
-    client = udp_client.SimpleUDPClient('192.168.1.37:5000', 6448)
+    client = udp_client.SimpleUDPClient('192.168.1.77', 6448)
     
 
     bundle = osc_bundle_builder.OscBundleBuilder(osc_bundle_builder.IMMEDIATELY)
     msg = osc_message_builder.OscMessageBuilder(address="/jake/inputs")
     for val in funVariable:
         msg.add_arg(val)
-        print(val)
-        time.sleep(1)
+        time.sleep(.1)
     
     bundle.add_content(msg.build())
     client.send(bundle.build())

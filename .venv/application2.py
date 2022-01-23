@@ -6,7 +6,7 @@
 
 
 from flask import Flask, render_template, request
-from pythonosc import udp_client, osc_message_builder
+from pythonosc import udp_client, osc_message_builder, osc_bundle_builder
 import numpy
  
 

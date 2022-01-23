@@ -1,27 +1,8 @@
 var mic;
 let keyID;
-let r, g, b;
-let rSlider;
-//var socket = io();
 
 function setup() {
     
-//     //socket = io.connect('');
-//     socket.on('volume',
-//     // When we receive data
-//     function(data) {
-//       console.log("Got: " + data);
-//     }
-//   );
-
-// $(document) .ready(function(){  
-//     var socket = io.connect('http://' + document.domain + ':' + location.port)
-//     $('form#emit').submit(function(event) {
-//         socket.emit('volume', {data: $('#emit_data').val()});
-//         return false;
-//     })
-
-// });
 
     keyID = int(random(1000));
     console.log(keyID);
@@ -35,28 +16,27 @@ function setup() {
     // b = random(50, 255);
     textSize(200);
 
-    rSlider = createSlider(0,300, 100);
-    rSlider.position(300,300);
+
 
 }
 function draw() {
 
 
-    background(r, g, b);
+    ellipse(displayWidth/2, displayHeight/2, random(0, 500), random(0, 500))
  
-  
-    var vol = mic.getLevel();
+    var vol = random(0,100)
+    // var vol = mic.getLevel();
     // send vol to the server every frame. The framerate is 2 fps so this is every 500ms.
     // If you increrase the framerate, maybe you should use setTimeout instead
     
     
     
     textSize(16);
-    fill(color('Green'));
+    fill(255,255,153);
     textAlign(CENTER);
     text("text", 600, 300);
-    ellipse(100, 100, vol*1000, vol*1000);
-    r = rSlider.value();
+    // ellipse(100, 100, vol*1000, vol*1000);
+
   
 
     console.log(vol);

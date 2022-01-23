@@ -1,7 +1,29 @@
+*{
+  margin:0;
+  padding :0;
+  box-sizing: border-box;
+}
+
 body {
+    overflow: hidden;
     background-color:rgb(247, 248, 190);
     
    }
+
+canvas {
+  background-color:rgb(247, 248, 190);
+    padding-left: 0;
+    padding-right: 0;
+    margin-left: auto;
+    margin-right: auto;
+    padding-top: 0;
+    padding-bottom: 0;
+    margin-top: 200px;
+    margin-bottom: auto;
+    display: block;
+    width: 100px;
+
+}
 
    .center {
     display: block;
@@ -9,3 +31,16 @@ body {
     margin-right: auto;
     width: 50%;
   }
+
+
+  .pids-wrapper{
+    width: 100%;
+  }
+  .pid{
+    width: calc(10% - 10px);
+    height: 10px;
+    display: inline-block;
+    margin: 5px;
+  }
+
+  
