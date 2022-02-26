@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request
 from pythonosc import udp_client, osc_message_builder, osc_bundle_builder
-import time
+import time, random
 
 dataIDlist = []        #this creates an array to store both client ids in and their volume data
 keyIDlist = []
@@ -11,7 +11,7 @@ app = Flask(__name__,static_url_path="/")
 
 @app.route("/")
 def root():
-    return app.send_static_file('index2.html')
+    return app.send_static_file('index.html') #running p5 now with index page
 
 @app.route("/publish", methods=["POST", "GET"])
 def post_data():
@@ -54,14 +54,14 @@ def post_data():
         funVariable.pop(9)
     print("FUN VARIABLE IS:" , funVariable)                                                                 ###funvariable###
 
-    client = udp_client.SimpleUDPClient('192.168.1.77', 6448)
+    client = udp_client.SimpleUDPClient('192.168.1.78', 6448)
     
 
     bundle = osc_bundle_builder.OscBundleBuilder(osc_bundle_builder.IMMEDIATELY)
     msg = osc_message_builder.OscMessageBuilder(address="/jake/inputs")
     for val in funVariable:
         msg.add_arg(val)
-        time.sleep(.1)
+        time.sleep(.01)
     
     bundle.add_content(msg.build())
     client.send(bundle.build())
